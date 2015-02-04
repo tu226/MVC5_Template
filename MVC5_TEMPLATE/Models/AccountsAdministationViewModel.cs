@@ -5,27 +5,52 @@ using System.Web;
 using System.Data.SqlClient;
 using System.Configuration;
 using Dapper;
+
+
 namespace Adrien.Template.Models
 {
+
+    public class UserModel
+    {
+        public string username { get; set; }
+        public int userid { get; set; }
+        public List<string> roles { get; set; }
+    }
+
     public class AccountsAdministationViewModel
     {
-        public List<User> users { get; set; }
 
-        public AccountsAdministationViewModel() {
-            
-            using (SqlConnection cnx = new SqlConnection(ConfigurationManager.ConnectionStrings["default"].ConnectionString)) {
-                cnx.Query<User>("select * from ");
+        public List<UserModel> users { get; set; }
+        public List<string> roles { get; set; }
+
+        public AccountsAdministationViewModel()
+        {
+
+            using (SqlConnection cnx = new SqlConnection(ConfigurationManager.ConnectionStrings["default"].ConnectionString))
+            {
+                users = cnx.Query<UserModel>("select userid,username from users").ToList<UserModel>();
+                foreach (UserModel user in users)
+                {
+                    user.roles = cnx.Query<string>("select rolename from UsersRoles where userid=@id", new { id = user.userid }).ToList<string>();
+                }
+                roles = cnx.Query<string>("select rolename from Usersroles group by rolename").ToList<string>();
             }
 
         }
 
-        public class User {
-            string username { get; set; }
-            int userid { get; set; }
-            List<string> roles { get; set; }
+
+    }
+
+    public class EditUserControllerViewModel {
+
+        public UserModel user { get; set; }
+        public EditUserControllerViewModel(int userid) {
+            using (SqlConnection cnx = new SqlConnection(ConfigurationManager.ConnectionStrings["default"].ConnectionString))
+            {
+                user = cnx.Query<UserModel>("select userid,username from users where userid=@id", new { id=userid }).FirstOrDefault();
+                user.roles = cnx.Query<string>("select rolename from UsersRoles where userid=@id", new { id = user.userid }).ToList<string>();
+            }
         }
-
-        
-
+    
     }
 }

@@ -20,7 +20,10 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Log out","logout")</li>
+                    @if (Request.GetOwinContext().Authentication.User.Identity.IsAuthenticated) {
+                    <li>@Html.ActionLink("Log out","logout","home",null,null)</li>}
+                    @if (Request.GetOwinContext().Authentication.User.IsInRole("admin")) { 
+                    <li>@Html.ActionLink("Administration", "Index", "AccountAdministration", null, null)</li>}
                     
                 </ul>
             </div>
@@ -30,7 +33,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p>&copy; @DateTime.Now.Year - Inférence Opérations <a href="http://bva.fr">BVA</a></p>
         </footer>
     </div>
 
