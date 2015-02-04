@@ -3,6 +3,32 @@
     ViewBag.Title = "Login";
 }
 
-<h2>Login</h2>
-<p>@ViewBag.error</p>
+<div class="container">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-offset-5 col-md-3">
+                <form class="form-login" method="get">
+                    <h4>Please Sign in</h4>
+                    <input type="text" id="username" name="username" class="form-control input-sm chat-input" placeholder="username" />
+                    </br>
+                    <input type="password" id="password" name="password" class="form-control input-sm chat-input" placeholder="password" />
+                    <input type="hidden" name="returnUrl" value="@Request.QueryString["ReturnUrl"]"/>
+                    </br>
+                    @if (@ViewBag.ErrorMessage != null)
+                    {
+                        <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+                    }
+                    <div class="wrapper">
+                        <span class="group-btn">
+                            <button class="btn btn-primary btn-md">login <i class="fa fa-sign-in"></i></button>
+                        </span>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+   
+</div>
+
 

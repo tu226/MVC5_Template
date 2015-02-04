@@ -13,9 +13,11 @@ using System.Security.Claims;
 
 namespace Adrien.Template.Controllers
 {
+
+    [Authorize]
     public class HomeController : Controller
     {
-        [Authorize(Roles="guest")]
+        
         public ActionResult Index()
         {
             ViewBag.Title = "Home Page";
@@ -23,9 +25,13 @@ namespace Adrien.Template.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         public async Task<ActionResult> Login(string username, string password, string returnUrl)
         {
-            if (username != null && username !=null)
+            if (Request.GetOwinContext().Authentication.User.Identity.IsAuthenticated) {
+                return RedirectToAction("Index");
+            }
+            if (!string.IsNullOrEmpty(username)  && !string.IsNullOrEmpty(password))
             {
 
                 var userManager = Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
@@ -42,7 +48,8 @@ namespace Adrien.Template.Controllers
                     ClaimsIdentity cookiesIdentity = new ClaimsIdentity(claims.ToArray(), CookieAuthenticationDefaults.AuthenticationType);
                     Request.GetOwinContext().Authentication.SignIn(cookiesIdentity);
 
-                    return Redirect("returnUrl");
+                    if (string.IsNullOrEmpty(returnUrl)) { returnUrl = "/home"; };
+                    return Redirect(returnUrl);
                 }
                 else {
                     ViewBag.ErrorMessage = "Incorrect credentials";
@@ -55,7 +62,7 @@ namespace Adrien.Template.Controllers
         public ActionResult Logout()
         {
 
-             Request.GetOwinContext().Authentication.SignOut(CookieAuthenticationDefaults.AuthenticationType);
+            Request.GetOwinContext().Authentication.SignOut(CookieAuthenticationDefaults.AuthenticationType);
             return RedirectToAction("LogIn");
 
         }
