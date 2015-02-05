@@ -21,7 +21,7 @@ namespace Adrien.Template
 
         public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
         {
-            var manager = new ApplicationUserManager(new UserStore(ConfigurationManager.ConnectionStrings["default"].ConnectionString));
+            var manager = new ApplicationUserManager(new UserStore(ConfigurationManager.ConnectionStrings["laptop"].ConnectionString));
             // Configure validation logic for usernames
             manager.UserValidator = new CustomUserValidator<User>(manager);
             // Configure validation logic for passwords

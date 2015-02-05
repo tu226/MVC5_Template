@@ -15,7 +15,7 @@
     <tbody>
         @foreach (var user in users) {
             int userid = user.userid;
-            <tr><td>@Html.ActionLink((string)user.username, "EditUser", new { id=userid})</td><td>@String.Join(" ",user.roles)</td></tr>
+            <tr><td>@Html.ActionLink((string)user.username, "EditUser", new { userid=userid},null)</td><td>@String.Join(" ",user.roles)</td></tr>
         }
     </tbody>
 </table>
