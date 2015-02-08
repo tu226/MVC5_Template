@@ -1,0 +1,20 @@
+﻿@{
+    ViewBag.Title = "EditUser";
+}
+<div ng-controller="users">
+    <h2>Edit User</h2>
+
+    <div ng-show="main">
+    <ul>
+        <li ng-repeat="user in users"><a href="#" ng-click="startEdit(user)">{{user.username}}</a></li>
+    </ul>
+</div>
+    <div ng-show="edit">
+        <label>Username</label><input type="text" ng-model="editUser.username"/>
+        <ul><li ng-repeat="role in editUser.roles">{{role.rolename}} <a href="#" ng-click="removeRole(role)">X</a></li></ul>
+        <ul><li ng-repeat="role in roles | filter:filterRoles"><a href="#" ng-click="addRole(role)">{{role.rolename}}</a></li></ul>
+        <buttton class="btn btn-success" ng-click="saveUser(editUser)">Save</buttton><button class="btn btn-danger" ng-click="cancelEdit()">Cancel</button>
+    </div>
+</div>
+
+

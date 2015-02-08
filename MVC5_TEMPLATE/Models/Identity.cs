@@ -125,7 +125,7 @@ using Microsoft.Owin.Security.OAuth;
                 return Task.Factory.StartNew(() =>
                 {
                     using (SqlConnection connection = new SqlConnection(connectionString))
-                        connection.Execute("insert into UsersRoles (UserID,RoleName) values (@UserId,@roleName)", new { UserId = user.Id, roleName = roleName });
+                        connection.Execute("insert into UsersRoles (UserID,UserID) values (@UserId,@roleName)", new { UserId = user.Id, roleName = roleName });
                 });
             }
 
@@ -134,7 +134,7 @@ using Microsoft.Owin.Security.OAuth;
                 return Task.Factory.StartNew(() =>
                 {
                     using (SqlConnection connection = new SqlConnection(connectionString))
-                        return (IList<string>)connection.Query<string>("select rolename from UsersRoles where UserId=@UserId group by rolename", new { UserId = user.Id }).ToList();
+                        return (IList<string>)connection.Query<string>("select r.rolename from UsersRoles as ur inner join roles as r on r.roleid=ur.roleid where UserId=@UserId group by rolename", new { UserId = user.Id }).ToList();
                 });
             }
 
@@ -144,7 +144,7 @@ using Microsoft.Owin.Security.OAuth;
                 {
                     using (SqlConnection connection = new SqlConnection(connectionString))
                     {
-                        dynamic result = connection.Query("select count(*) as ct from UsersRoles where UserId=@UserId,RoleName=@roleName", new { UserId = user.Id, roleName = roleName }).Single();
+                        dynamic result = connection.Query("select count(userid) as ct from UsersRoles as ur inner join roles as r on r.roleid=ur.roleid where ur.UserId=@UserId and r.RoleName=@roleName", new { UserId = user.Id, roleName = roleName }).Single();
                         return (bool)(result.ct > 0);
                     }
                 });
@@ -155,7 +155,7 @@ using Microsoft.Owin.Security.OAuth;
                 return Task.Factory.StartNew(() =>
                 {
                     using (SqlConnection connection = new SqlConnection(connectionString))
-                        connection.Execute("delete from UsersRoles where UserId=@UserId and RoleName=@roleName", new { UserId = user.Id, roleName = roleName });
+                        connection.Execute("delete ur from UsersRoles as ur inner join roles as r on r.roleid=ur.roleid where ur.UserId=@UserId and r.RoleName=@roleName", new { UserId = user.Id, roleName = roleName });
                 });
             }
 
