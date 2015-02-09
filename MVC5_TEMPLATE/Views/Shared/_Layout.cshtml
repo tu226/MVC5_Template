@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
+     <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    <script src="~/Scripts/angular.min.js"></script>
+    <script src="~/Scripts/app.js"></script>
 </head>
 <body ng-app="app" ng-cloak>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -21,9 +23,9 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     @if (Request.GetOwinContext().Authentication.User.Identity.IsAuthenticated) {
-                    <li>@Html.ActionLink("Log out","logout","home",null,null)</li>}
+                    <li><a href="~/home/logout"><i class="fa fa-sign-out"></i> Sign Out</a></li>}
                     @if (Request.GetOwinContext().Authentication.User.IsInRole("admin")) { 
-                    <li>@Html.ActionLink("Administration", "Index", "AccountAdministration", null, null)</li>}
+                    <li><a href="~/administration"><i class="fa fa-cog"></i> Admin</a></li>}
                     
                 </ul>
             </div>
@@ -39,8 +41,6 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
-    @Scripts.Render("~/bundles/angular")
-    <script src="~/Scripts/angular.min.js"></script>
-    <script src="~/Scripts/app.js"></script>
+    
 </body>
 </html>

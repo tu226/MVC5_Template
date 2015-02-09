@@ -2,19 +2,81 @@
     ViewBag.Title = "EditUser";
 }
 <div ng-controller="users">
-    <h2>Edit User</h2>
+    <h2><i class="fa fa-user"></i> Users administration    </h2>
 
-    <div ng-show="main">
-    <ul>
-        <li ng-repeat="user in users"><a href="#" ng-click="startEdit(user)">{{user.username}}</a></li>
-    </ul>
+<!--List of users-->
+<div ng-show="main">
+    <table class="table table-bordered table-condensed">
+        <thead>
+            <tr>
+                <th><i class="fa fa-tag"></i> Username</th>
+                <th><i class="fa fa-users"></i> Roles</th>
+                <th>Edit</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="user in users">
+                <td>{{user.username}}</td>
+                <td><span ng-repeat="role in user.roles">{{role.rolename}} </span></td>
+                <td style="text-align:center"><a href="#" ng-click="startEdit(user)"><i class="fa fa-pencil"></i><a</td>
+            </tr>
+        </tbody>
+    </table>
+    <button class="btn btn-primary" ng-click="startCreate()"><i class="fa fa-plus"></i> Add user</button>
 </div>
-    <div ng-show="edit">
-        <label>Username</label><input type="text" ng-model="editUser.username"/>
-        <ul><li ng-repeat="role in editUser.roles">{{role.rolename}} <a href="#" ng-click="removeRole(role)">X</a></li></ul>
-        <ul><li ng-repeat="role in roles | filter:filterRoles"><a href="#" ng-click="addRole(role)">{{role.rolename}}</a></li></ul>
-        <buttton class="btn btn-success" ng-click="saveUser(editUser)">Save</buttton><button class="btn btn-danger" ng-click="cancelEdit()">Cancel</button>
+
+    <!--Edit User-->
+    <div ng-show="edit" class="panel panel-primary">
+        <div class="panel-heading"><i class="fa fa-pencil"></i> Edit user {{editUser.username}}</div>
+        <div class="panel-body">
+            <div class="form-inline">
+                <div class="form-group">
+                    <label for="username"><i class="fa fa-tag"></i> Username</label><input name="username" type="text" ng-model="editUser.username" class="form-control" required/>
+                </div>
+            </div>
+            <h3>Roles</h3>
+            <ul class="list-group">
+                <li class="list-group-item" ng-repeat="role in editUser.roles">
+                    <a title="Remove role" href="#" ng-click="removeRole(role)">
+                        <i class="fa fa-minus"></i>
+                    </a> {{role.rolename}}
+                </li>
+            </ul>
+            <h3>Add roles</h3>
+            <ul class="list-group">
+                <li class="list-group-item" ng-repeat="role in roles | filter:filterRoles">
+                    <a title="Add role" href="#" ng-click="addRole(role)"><i class="fa fa-plus"></i></a> {{role.rolename}}
+                </li>
+            </ul>
+            
+        </div>
+        <div class="panel-footer" style="text-align:center">
+            <buttton class="btn btn-success" ng-click="saveUser(editUser)" style="margin-left:10px"><i class="fa fa-floppy-o"></i> Save</buttton>
+            <button class="btn btn-danger" ng-click="cancelEdit()">Cancel</button></div>
     </div>
+
+    <!--Create User-->
+    <div ng-show="create" class="panel panel-primary">
+        <div class="panel-heading"><i class="fa fa-pencil"></i> Add a user {{newUser.username}}</div>
+        <div class="panel-body">
+            <div class="form-inline">
+                <div class="form-group">
+                    <label id="newUserLabel" for="username"><i class="fa fa-tag"></i> Username</label><input name="username" type="text" ng-model="newUser.username" class="form-control" required />
+                </div>
+                <div class="form-group">
+                    <label  for="password"><i class="fa fa-lock"></i> Password</label><input name="password" type="text" ng-model="newUser.password" class="form-control" required />
+                </div>
+            </div>
+            
+
+        </div>
+        <div class="panel-footer" style="text-align:center">
+            <buttton class="btn btn-success" ng-click="createUser(newUser)" style="margin-left:10px"><i class="fa fa-floppy-o"></i> Save</buttton>
+            <button class="btn btn-danger" ng-click="cancelCreate()">Cancel</button>
+        </div>
+    </div>
+
+
 </div>
 
 
